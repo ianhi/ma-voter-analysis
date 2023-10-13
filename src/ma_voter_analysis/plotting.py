@@ -16,6 +16,10 @@ def multi_year_bar(
     **kwargs,
 ):
     """
+    Create a collection of bar charts over years.
+
+    Parameters
+    ----------
     df : pd.DataFrame
         Expected to have "years" as the first level of index
         Additionally should have been passed through *turnout_year_key*
@@ -29,12 +33,11 @@ def multi_year_bar(
     figsize, sharex, sharey:
         Passed on *plt.subplots*
     **kwargs :
-        Passed to *bar_function*
+        Passed to *bar_function*.
 
     Returns
     -------
-    fig
-    axs
+    fig, axs
     """
     if years is None:
         years = sorted(df.index.unique(level=0))[::-1]
@@ -55,22 +58,51 @@ def multi_year_bar(
     return fig, axs
 
 
-def turnout_bar_graph(df, year, ax=None, bar_width=3.75):
+def turnout_bar_graph(
+    df: pd.DataFrame,
+    year: float,
+    registered_color="gray",
+    voted_color="tab:green",
+    ax=None,
+    **style_kwargs,
+):
+    """Generate a bar graph of turnout by year.
+
+    Can be used on it's own or as part of *multi_year_bar*
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Output from the *turnout_by_year_key* function.
+    year : Number
+        The year to select from the index for plotting.
+    registered_color : str
+        The bar color for people who registered but did not vote.
+    voted_color : str
+        The bar color for people who voted.
+    ax : matplotlib axis
+        The axis on which to plot.
+    **style_kwargs :
+        Passed to *ax.bar*
+    """
     if ax is None:
         ax = plt.gca()
+    bar_width = style_kwargs.pop("bar_width", 3.75)
     ax.bar(
         df.loc[year]["mid_points"],
         df.loc[year]["registered"],
         width=bar_width,
-        color="gray",
+        color=registered_color,
         label="Registered - did not vote",
+        **style_kwargs,
     )
     ax.bar(
         df.loc[year]["mid_points"],
         df.loc[year]["voted"],
         width=bar_width,
-        color="tab:green",
+        color=voted_color,
         label="Voted",
+        **style_kwargs,
     )
 
 
@@ -81,6 +113,7 @@ def university_housing_bar_chart(
     ax,
     bar_width=0.75,
 ):
+    """Create a bar chart of voters living in the given University housing."""
     registered = df[idx].loc[year]["univ_housing_name"].value_counts().sort_index()
     voted = (
         df[idx]

@@ -1,14 +1,16 @@
 from __future__ import annotations
+
 from datetime import timedelta
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
-
-from typing import TYPE_CHECKING
 from numpy import dtype
 
 if TYPE_CHECKING:
+    from typing import Tuple
+
     from pandas.core.tools.datetimes import DatetimeScalar
 
 _history_dtypes = {
@@ -129,7 +131,9 @@ DROPPED_IDS = [
     "01CKN0113009",  #   01/01/1813
     "01AAA0112016",  #   01/01/1812
 ]
-def load_voter_list(file: str, date_for_age: DatetimeScalar)->pd.DataFrame:
+
+
+def load_voter_list(file: str, date_for_age: DatetimeScalar) -> pd.DataFrame:
     """
     Load a voter list into a Dataframe.
 
@@ -158,12 +162,14 @@ def load_voter_list(file: str, date_for_age: DatetimeScalar)->pd.DataFrame:
     # # check that this is actually correct ideally
     # subtract (1-1/365) to make it so people turning 18 on election day count as 18
     age = np.ceil(
-        (pd.to_datetime(date_for_age) - birth_dates) / timedelta(days=365.2425) - (1 - 1 / 365)
+        (pd.to_datetime(date_for_age) - birth_dates) / timedelta(days=365.2425)
+        - (1 - 1 / 365)
     ).astype(int)
     vlist["age"] = age
     return vlist
 
-def load_history(file: str)->pd.DataFrame:
+
+def load_history(file: str) -> pd.DataFrame:
     """
     Load a voter history file for a given year into a DataFrame.
 
@@ -213,6 +219,17 @@ def load_year(
     vlist.loc[vlist.index.intersection(history.index), "voted"] = True
     return vlist
 
+def load_many_years(files: dict[int, Tuple[str, str]])->pd.DataFrame:
+    """
+    Load multiple years and concatenate into a single dataframe.
+
+    Parameters
+    ----------
+    files : dict
+        A dictionary with integer keys of years, and values of
+        (voter_history_file, voter_list_file)
+    """
+    TODO
 
 def load_full_dataset(data_folder):
     data_folder = Path(data_folder)
@@ -325,11 +342,7 @@ def load_full_dataset(data_folder):
 
 
 def _group_turnout(df: pd.DataFrame, key: str, bin_size: int) -> pd.DataFrame:
-    """
-    Convert the output of *turn to turnout by age group.
-
-    """
-
+    """Convert the output of *turn to turnout by age group."""
     grouped = df.reset_index()
     min_ = grouped[key].min()
     max_ = grouped[key].max()
@@ -363,7 +376,7 @@ def _group_turnout(df: pd.DataFrame, key: str, bin_size: int) -> pd.DataFrame:
     return grouped
 
 
-def turnout_by_year_key(df, key, binning: int = None):
+def turnout_by_year_key(df, key, binning: int | None = None):
     """
     Calculate turnout per year based on the variable *key*.
 

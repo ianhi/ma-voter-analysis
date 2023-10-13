@@ -1,4 +1,4 @@
-"""tools for analy voter histories in MA"""
+"""tools for analy voter histories in MA."""
 from importlib.metadata import PackageNotFoundError, version
 
 try:

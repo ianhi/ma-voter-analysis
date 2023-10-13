@@ -167,4 +167,3 @@ lesley_housing = {
     "Winthrop Hall": (list(range(1, 7 + 1, 2)), "SAINT JOHNS RD"),
     "Wolfard Hall": (34, "MELLEN ST"),
 }
-
