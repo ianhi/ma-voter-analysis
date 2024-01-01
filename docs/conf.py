@@ -7,6 +7,7 @@
 # -- Path setup --------------------------------------------------------------
 
 import inspect
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -20,7 +21,6 @@ try:
     from ma_voter_analysis import __version__ as release
 except ImportError:
     release = "unknown"
-
 
 
 # -- Project information -----------------------------------------------------
@@ -225,4 +225,4 @@ def linkcode_resolve(domain, info):
 
     fn = os.path.relpath(fn, start=os.path.dirname("../ma_voter_analysis"))
 
-    return f"https://github.com/ianhi/ma-voter-analysis/blob/main/ma_voter_analysis/{fn}{linespec}"  # noqa
+    return f"https://github.com/ianhi/ma-voter-analysis/blob/main/ma_voter_analysis/{fn}{linespec}"
