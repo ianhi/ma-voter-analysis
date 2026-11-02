@@ -219,7 +219,8 @@ def load_year(
     vlist.loc[vlist.index.intersection(history.index), "voted"] = True
     return vlist
 
-def load_many_years(files: dict[int, Tuple[str, str]])->pd.DataFrame:
+
+def load_many_years(files: dict[int, Tuple[str, str]]) -> pd.DataFrame:
     """
     Load multiple years and concatenate into a single dataframe.
 
@@ -230,6 +231,7 @@ def load_many_years(files: dict[int, Tuple[str, str]])->pd.DataFrame:
         (voter_history_file, voter_list_file)
     """
     TODO
+
 
 def load_full_dataset(data_folder):
     data_folder = Path(data_folder)
